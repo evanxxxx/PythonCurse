@@ -1,0 +1,42 @@
+Para enviar un error HTTP 
+1 se debe importar la libreria HTTPException
+2 agregar en los argumentos de nuestra funcion status_code = 201
+3 ejemplo @app.post("/user/",status_code=201)
+4 se puede agregar tambien response_model en el patch lo que hace es que devuelve la entidad creada 
+para que la documentacion sea mas legible http://127.0.0.1:8000/docs
+5 ejemplo @app.post("/user/", response_model=User ,status_code=201)
+
+Para enviar un error HTTP sobre algo que salio mal de la funcion
+1 se debe importar la libreria HTTPException
+2 agregar la palabra raise que es la que nos va a propagar el error
+3 en seguida agregar HTTPException, en los parametros se agrega status_code=204, 
+seguido se puede agregar detail = "descripcion personalizada del error"
+4 ejemplo raise HTTPException(status_code=204, detail="el usuario ya existe")
+
+ROUTERs (para jalar tus APIs desde main)
+1 Crear la carpeta routers
+2 meter nuestras APIs que no son main a la carpeta
+3 importar nuestro archivo de la sig forma from Fastapi import APIRouter
+4 ejemplo from fastapi import APIRouter y crear variable router= APIRouter()
+5 ir de nuevo a main e importar la carpeta y archivo 
+6 ejemplo from routers import products (es el nombre del archivo dentro de la carpeta routers)
+7 ahora importamos como routers nuestros APIRouter de los archivos en la carpeta routers ejemplo
+8 app.include_router(products.router)
+9 app es el nombre de la instancia del main, include_router es para incluir el router 
+(agregamos el nombre del archivo y seguido de un punto . el nombre de la variable del router)
+
+Prefijos para los routers
+1 tenemos nuestro router= APIRouter()
+2 si le agregamos la palabra prefix ya no tenemos que agregar el path a cada @router.get APIRouter
+3 ejemplo router= APIRouter(prefix="/products")
+4 ahora se escribiria asi @router.get("/") o @router.get("/{id}")
+
+Se puede agregar a Router = APIRouter Responses para responder en caso de no encontrar algo
+1 el codigo es responses={404: {"mensaje": "No encontrado"}}
+2 queda asi router= APIRouter(prefix="/products", responses={404: {"mensaje": "No encontrado"}})
+
+Tags se agregan para que se separe los path en la documentacion por secciones
+1 el codigo es tags=["Products"]
+2 queda asi router= APIRouter(prefix="/products", tags="Products"
+                  responses={404: {"mensaje": "No encontrado"}})
+                  
