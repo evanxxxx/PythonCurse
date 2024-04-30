@@ -37,6 +37,6 @@ Se puede agregar a Router = APIRouter Responses para responder en caso de no enc
 
 Tags se agregan para que se separe los path en la documentacion por secciones
 1 el codigo es tags=["Products"]
-2 queda asi router= APIRouter(prefix="/products", tags="Products"
+2 queda asi router= APIRouter(prefix="/products", tags=["Products"]
                   responses={404: {"mensaje": "No encontrado"}})
                   
