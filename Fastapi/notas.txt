@@ -39,4 +39,14 @@ Tags se agregan para que se separe los path en la documentacion por secciones
 1 el codigo es tags=["Products"]
 2 queda asi router= APIRouter(prefix="/products", tags=["Products"]
                   responses={404: {"mensaje": "No encontrado"}})
+
+Recursos Estaticos (para compartir recursos como fotos, pdfs y se puedan descargar)
+1 hacer carpeta static
+2 hacer sub carpetas como imagenes, pdfs etc
+3 subir img a la carpeta imagenes
+4 importamos la libreria  from fastapi.staticfiles import StaticFiles
+4 hay que rotear la carpeta creada en main pero usamos mount
+5 ejemplo app.mount("/static", StaticFiles(directory="static"), name="static")
+6 ya podemos acceder 
+
                   
