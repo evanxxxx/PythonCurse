@@ -1,3 +1,9 @@
+para ejecutar uvicorn 
+1 python -m uvicorn main:app --reload
+2 uvicorn main:app --reload
+
+
+
 Para enviar un error HTTP 
 1 se debe importar la libreria HTTPException
 2 agregar en los argumentos de nuestra funcion status_code = 201
