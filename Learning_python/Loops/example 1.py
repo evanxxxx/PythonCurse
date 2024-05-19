@@ -83,6 +83,6 @@ print({key:str(value) for key, value in my_dict.items()})
 doc = open(r"C:\Users\SYGNO\Desktop\notas.txt", "r")
 data = doc.readlines()
 for x in data:
-    if x.find() == "Titular" :
+    if x.find("Banco") :
         print(x)
 
