@@ -1,8 +1,7 @@
 import uuid
 from datetime import datetime
 from fastapi import FastAPI, HTTPException, status
-from sqlmodel import Field, SQLModel, create_engine, Session, select
-
+from sqlmodel import Field, SQLModel, create_engine, Session
 
 
 app = FastAPI()
@@ -55,31 +54,47 @@ def create_user_api(user: User):
                                 detail="Error, The user was not found.")
     return user
 
-@app.get("/users1/{user_id}")
-def search_user_api(user_id :int, user: User):
-   with Session(engine) as session:
-        db_user= session.get(User, user.user_id == user_id)
+@app.put("/users/{user_id}")
+def update_user_api(user_id:int, user:User):
+    with Session(engine) as session: 
         
-        if not db_user:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-                                detail="Error, The user was not found.")      
-        else:   
-            return user
-    
-@app.get("/users/{user_id}")
-def search_user_api(user_id :int):
-   with Session(engine) as session:
-        query = select(User).where(User.user_id == user_id)
-        search = session.exec(query).first()
-        if not search:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
-                                detail="Error, The user was not found.")      
-        else:   
-            return search
-
-
+        db_user = session.query(User).filter(User.user_id == user_id).first()
+        
+        for field, value in user.model_dump().items():
+            if hasattr(db_user, field):
+                setattr(db_user, field, value)
             
+            db_user.user_id = user_id
+            db_user.updated_at = datetime.now()
+            
+            session.commit()
+            return {"message": "Usuario actualizado correctamente"}
+
+    
+@app.delete("/users/{user_id}")
+def delet_user_api(user_id:int, user:User):
+    with Session(engine) as session:
+        db_user = session.get(User, user_id)     
+        user.user_id = user_id
+        user.deleted = True
+        user.deleted_at = datetime.now()
+        for key, value in user.model_dump().items():
+                if hasattr(db_user, key):
+                    setattr(db_user, key, value)
+        session.commit()
+        db_user = session.get(User, user_id)  
+        return db_user
         
+@app.get("/users/{user_id}")
+def search_user_api(user_id:int):
+    with Session(engine) as session:       
+        db_user = session.query(User).filter(User.user_id == user_id).first()
+        if db_user.deleted == False:
+            return db_user
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                                detail="Error, The user was not found.")   
+            
 @app.get("/health")
 def root()-> dict:
     return {
