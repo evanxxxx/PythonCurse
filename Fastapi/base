@@ -1,0 +1,39 @@
+create DATABASE if NOT EXISTS MIRAKI;
+
+use MIRAKI;
+
+create table IF NOT EXISTS role(
+	role_id SERIAL PRIMARY KEY, 
+	role_name VARCHAR(50),
+	desccription VARCHAR(50),
+	created_at DATETIME,
+	updated_at DATETIME,
+	deleted BOOLEAN DEFAULT false,
+	deleted_at DATETIME
+);
+
+create table IF NOT EXISTS users(
+	user_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(50),
+	last_name VARCHAR(50),
+	username VARCHAR(50),
+	user_password VARCHAR(50),
+	id_role  BIGINT NOT NULL,
+	created_at DATETIME,
+	updated_at DATETIME,
+	deleted BOOLEAN DEFAULT false,
+	deleted_at DATETIME,
+	CONSTRAINT id_role FOREIGN KEY (id_role) REFERENCES role(role_id)
+);
+
+{
+  "user_id": 3,
+  "firs_name": "ocampo",
+  "last_name": "bernal",
+  "username": "eocampo",
+  "password": "mamitas",
+  "created_at": "2024-05-16T21:35:46.828028",
+  "update_at": "2024-05-17T03:36:21.474Z",
+  "deleted": true,
+  "deleted_at": "2024-05-17T03:36:21.474Z"
+}
